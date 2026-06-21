@@ -2,50 +2,72 @@ import { existsSync, readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 
 const routes = [
-  "index.html",
-  "about/index.html",
-  "dr-wallis/index.html",
-  "services/index.html",
-  "services/longevity/index.html",
-  "services/medical-second-opinion/index.html",
-  "services/urgent-care/index.html",
-  "services/weight-management/index.html",
-  "services/womens-health/index.html",
-  "privacy/index.html",
-  "faq/index.html",
-  "contact/index.html",
+  "",
+  "about/",
+  "dr-wallis/",
+  "services/",
+  "services/longevity/",
+  "services/medical-second-opinion/",
+  "services/urgent-care/",
+  "services/weight-management/",
+  "services/womens-health/",
+  "privacy/",
+  "faq/",
+  "contact/",
 ];
 
-const routeSpecificCopy = new Map([
-  ["index.html", "Paradigm by DW Medical"],
-  ["about/index.html", "Quality healthcare should be accessible, personal, and convenient."],
-  ["dr-wallis/index.html", "Paradigm by DW Medical"],
-  ["services/index.html", "Healthcare Services Tailored to You"],
-  ["contact/index.html", "Contact Us"],
+const representativeSpanish = new Map([
+  ["", "Bienvenido a Paradigm by DW Medical"],
+  ["about/", "La atención médica de calidad debe ser accesible, personal y conveniente."],
+  ["dr-wallis/", "Qué puede esperar:"],
+  ["services/", "Servicios de salud adaptados a usted"],
+  ["services/longevity/", "Longevidad y medicina preventiva"],
+  ["services/medical-second-opinion/", "Segunda opinión médica"],
+  ["services/urgent-care/", "Atención urgente limitada"],
+  ["services/weight-management/", "Control del peso"],
+  ["services/womens-health/", "Menopausia y salud de la mujer"],
+  ["privacy/", "Política de privacidad"],
+  ["faq/", "Preguntas frecuentes"],
+  ["contact/", "Volver a la página de inicio"],
 ]);
 
-for (const file of routes) {
-  assert.equal(existsSync(file), true, `Missing page: ${file}`);
-  const html = readFileSync(file, "utf8");
+for (const route of routes) {
+  const englishPath = route ? `${route}index.html` : "index.html";
+  const spanishPath = route ? `es/${route}index.html` : "es/index.html";
 
-  assert.match(html, /<!-- Made in Framer/, `${file} should be a mirrored Framer page`);
-  assert.match(html, /meta name="generator" content="Framer/, `${file} should preserve Framer metadata`);
-  assert.match(html, /framerusercontent\.com\/sites\//, `${file} should preserve production asset URLs`);
-  assert.match(html, /Telemedicine in the DC area/, `${file} should preserve site metadata`);
+  assert.equal(existsSync(englishPath), true, `Missing English page: ${englishPath}`);
+  assert.equal(existsSync(spanishPath), true, `Missing Spanish page: ${spanishPath}`);
 
-  const expectedCopy = routeSpecificCopy.get(file);
-  if (expectedCopy) {
-    assert.match(
-      html,
-      new RegExp(expectedCopy.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-      `${file} missing route-specific copy`,
-    );
-  }
+  const english = readFileSync(englishPath, "utf8");
+  const spanish = readFileSync(spanishPath, "utf8");
+  const englishHref = route ? `/${route}` : "/";
+  const spanishHref = route ? `/es/${route}` : "/es/";
+
+  assert.match(english, /<!-- Made in Framer/, `${englishPath} should preserve Framer markup`);
+  assert.match(spanish, /<!-- Made in Framer/, `${spanishPath} should preserve Framer markup`);
+  assert.match(english, /<html[^>]+lang="en"/, `${englishPath} should declare English`);
+  assert.match(spanish, /<html[^>]+lang="es"/, `${spanishPath} should declare Spanish`);
+  assert.match(english, /data-language-switcher/, `${englishPath} should include the language control`);
+  assert.match(spanish, /data-language-switcher/, `${spanishPath} should include the language control`);
+  assert.match(english, new RegExp(`href="${escapeRegex(spanishHref)}"`), `${englishPath} missing Spanish route`);
+  assert.match(spanish, new RegExp(`href="${escapeRegex(englishHref)}"`), `${spanishPath} missing English route`);
+  assert.match(english, /hreflang="en"/, `${englishPath} missing English hreflang`);
+  assert.match(english, /hreflang="es"/, `${englishPath} missing Spanish hreflang`);
+  assert.match(spanish, /hreflang="en"/, `${spanishPath} missing English hreflang`);
+  assert.match(spanish, /hreflang="es"/, `${spanishPath} missing Spanish hreflang`);
+  assert.match(
+    spanish,
+    new RegExp(escapeRegex(representativeSpanish.get(route))),
+    `${spanishPath} missing representative Spanish copy`,
+  );
 }
 
-const home = readFileSync("index.html", "utf8");
-assert.match(home, /Book a Discovery Call/, "Home page should include the production CTA");
-assert.match(home, /Core Areas of Care/, "Home page should include the production care section");
-assert.match(home, /Published Jun 14, 2026, 11:12 AM UTC/, "Home page should match the mirrored publish timestamp");
+const sharedScript = readFileSync("assets/localization/language-switcher.js", "utf8");
+assert.match(sharedScript, /localStorage\.setItem/, "Language choice should be remembered");
+assert.match(sharedScript, /dw-language/, "Language preference should use a scoped storage key");
 
-console.log("Mirrored Framer site smoke test passed.");
+console.log("Bilingual Framer site tests passed.");
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}

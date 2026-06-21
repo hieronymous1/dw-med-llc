@@ -1,0 +1,104 @@
+.dw-language-switcher {
+  display: flex;
+  justify-content: flex-end;
+  width: min(1200px, calc(100% - 40px));
+  margin: -58px auto 0;
+  padding: 0 0 22px;
+  position: relative;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.dw-language-switcher__control {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  background: #050505;
+  pointer-events: auto;
+}
+
+.dw-language-switcher a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 30px;
+  border-radius: 999px;
+  color: #fff;
+  font: 700 11px/1 Arial, sans-serif;
+  text-decoration: none;
+}
+
+.dw-language-switcher a[aria-current="page"] {
+  background: #fff;
+  color: #000;
+}
+
+.dw-language-switcher a:focus-visible {
+  outline: 2px solid #c2d2ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 809px) {
+  .dw-language-switcher {
+    width: calc(100% - 32px);
+    margin-top: -70px;
+  }
+
+  .dw-language-switcher a {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+.dw-static-page {
+  min-height: 100vh;
+  background: #fffdf5;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dw-static-header {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 28px;
+  padding: 22px max(24px, calc((100vw - 1180px) / 2));
+  border-bottom: 1px solid #d8d5cc;
+}
+
+.dw-static-brand { color: #111; font-size: 22px; font-weight: 800; text-decoration: none; }
+.dw-static-brand span { display: block; font-size: 11px; font-weight: 500; letter-spacing: .08em; }
+.dw-static-header nav { display: flex; gap: 24px; }
+.dw-static-header nav a, .dw-static-footer a { color: inherit; text-decoration: none; }
+.dw-static-button { display: inline-flex; justify-content: center; padding: 13px 20px; border-radius: 999px; background: #111; color: #fff; font-weight: 700; text-decoration: none; }
+.dw-static-hero, .dw-static-grid, .dw-static-callout { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+.dw-static-hero { padding: 82px 0 64px; border-bottom: 1px solid #c9c5bb; }
+.dw-static-hero > p:first-child { color: #68635a; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+.dw-static-hero h1 { max-width: 950px; margin: 20px 0; font-size: clamp(48px, 8vw, 110px); line-height: .92; letter-spacing: -.055em; }
+.dw-static-hero h2 { max-width: 760px; font-size: clamp(24px, 3vw, 40px); }
+.dw-static-hero > p:last-child { max-width: 720px; color: #5d5850; font-size: 19px; line-height: 1.6; }
+.dw-static-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding: 72px 0; }
+.dw-static-grid h3 { margin: 0 0 18px; font-size: 24px; }
+.dw-static-grid p, .dw-static-grid li { font-size: 17px; line-height: 1.65; }
+.dw-static-grid li { margin-bottom: 10px; }
+.dw-static-note { margin-top: 28px; padding-top: 22px; border-top: 1px solid #c9c5bb; font-weight: 700; }
+.dw-static-callout { margin-bottom: 72px; padding: 46px; background: #c2d2ff; }
+.dw-static-callout h2 { margin: 0 0 12px; font-size: clamp(30px, 4vw, 54px); }
+.dw-static-callout p { max-width: 700px; font-size: 17px; line-height: 1.6; }
+.dw-static-button--light { margin-top: 12px; background: #fff; color: #111; }
+.dw-static-footer { padding: 52px max(24px, calc((100vw - 1180px) / 2)) 82px; background: #050505; color: #fff; }
+.dw-static-footer strong { font-size: 24px; }
+.dw-static-footer > p { max-width: 680px; color: #bbb; line-height: 1.55; }
+.dw-static-footer div { display: flex; flex-wrap: wrap; gap: 22px; margin: 28px 0; }
+
+@media (max-width: 809px) {
+  .dw-static-header { grid-template-columns: 1fr; gap: 16px; }
+  .dw-static-header nav { flex-wrap: wrap; gap: 12px 18px; }
+  .dw-static-header .dw-static-button { justify-self: start; }
+  .dw-static-hero { padding: 56px 0 42px; }
+  .dw-static-grid { grid-template-columns: 1fr; gap: 42px; padding: 48px 0; }
+  .dw-static-callout { padding: 30px 24px; }
+}
